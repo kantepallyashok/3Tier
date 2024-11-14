@@ -1,0 +1,34 @@
+name: Frontend Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build frontend image
+        run: |
+          docker build -t arithmetic-frontend .
+
+      - name: Run frontend container
+        run: |
+          docker run -d --name arithmetic-frontend -p 8080:80 arithmetic-frontend
+
+      - name: Get container IP address
+        run: |
+          IP_ADDRESS=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' arithmetic-frontend)
+          echo "Container IP address: $IP_ADDRESS"
+          echo "http://$IP_ADDRESS:8080"
+
+      - name: Expose container via ngrok
+        uses: actions-ngrok/ngrok@v1
+        with:
+          args: 8080
+        env:
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
