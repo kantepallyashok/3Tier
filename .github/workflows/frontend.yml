@@ -29,7 +29,7 @@ jobs:
 
     - name: Wait for the application to start
       run: |
-        sleep 15  # Increased wait time to allow the container to fully start
+        sleep 60  # Increased wait time to allow the container to fully start
 
     - name: Capture container ID
       id: capture_container_id
@@ -40,9 +40,9 @@ jobs:
     - name: View Docker container logs
       run: |
         echo "Container ID: ${{ steps.capture_container_id.outputs.container_id }}"
-        docker logs ${{ steps.capture_container_id.outputs.container_id }}  # Use the output from previous step
+        docker logs ${{ steps.capture_container_id.outputs.container_id }}  # View logs to verify if the app started correctly
 
-    - name: Test if frontend is running
+    - name: Test if frontend is running inside the container
       run: |
         docker exec ${{ steps.capture_container_id.outputs.container_id }} curl --silent --fail http://localhost:8080 || exit 1  # Access container directly with curl
 
