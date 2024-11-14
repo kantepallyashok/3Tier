@@ -29,11 +29,15 @@ jobs:
 
     - name: Wait for the application to start
       run: |
-        sleep 10  # Increased wait time for the app to start
+        sleep 15  # Increased wait time to give more time for the app to start
 
     - name: Test if frontend is running
       run: |
         curl --silent --fail http://localhost:8080 || exit 1
+
+    - name: View Docker container logs
+      run: |
+        docker logs $(docker ps -q)
 
     - name: Stop Docker container
       run: |
