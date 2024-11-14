@@ -21,7 +21,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t frontend-app -f FrontEnd/Dockerfile ./frontend
+        docker build -t frontend-app -f FrontEnd/Dockerfile ./FrontEnd
 
     - name: Run Docker container
       run: |
