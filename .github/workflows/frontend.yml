@@ -44,7 +44,7 @@ jobs:
 
     - name: Test if frontend is running
       run: |
-        docker exec -it ${{ steps.capture_container_id.outputs.container_id }} curl --silent --fail http://localhost:8080 || exit 1  # Access container directly with curl
+        docker exec ${{ steps.capture_container_id.outputs.container_id }} curl --silent --fail http://localhost:8080 || exit 1  # Access container directly with curl
 
     - name: Stop Docker container
       run: |
