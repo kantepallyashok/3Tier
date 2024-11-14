@@ -32,14 +32,15 @@ jobs:
         sleep 30  # Increased wait time to allow the container to fully start
 
     - name: Capture container ID
-      id: container_id
+      id: capture_container_id
       run: |
         container_id=$(docker ps -q)
-        echo "container_id=$container_id" >> $GITHUB_ENV
+        echo "::set-output name=container_id::$container_id"  # Save the container_id as output
 
     - name: View Docker container logs
       run: |
-        docker logs ${{ env.container_id }}  # Use the container ID from the previous step
+        echo "Container ID: ${{ steps.capture_container_id.outputs.container_id }}"
+        docker logs ${{ steps.capture_container_id.outputs.container_id }}  # Use the output from previous step
 
     - name: Test if frontend is running
       run: |
@@ -47,4 +48,4 @@ jobs:
 
     - name: Stop Docker container
       run: |
-        docker stop ${{ env.container_id }}  # Stop the container after the tests
+        docker stop ${{ steps.capture_container_id.outputs.container_id }}  # Stop the container after the tests
