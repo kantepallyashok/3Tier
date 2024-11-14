@@ -1,12 +1,18 @@
-# Use an official NGINX image to serve static content
-FROM nginx:alpine
+# Use Node.js official image
+FROM node:14
 
-# Copy the frontend files into the NGINX HTML directory
-COPY index.html /usr/share/nginx/html/index.html
-COPY app.js /usr/share/nginx/html/app.js
+# Set the working directory in the container
+WORKDIR /app
 
-# Expose the port the app will run on
+# Copy package.json and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose port 8080
 EXPOSE 8080
 
-# Start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Run the application
+CMD ["node", "app.js"]
