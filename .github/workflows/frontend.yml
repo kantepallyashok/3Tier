@@ -31,9 +31,15 @@ jobs:
       run: |
         sleep 30  # Increased wait time to allow the container to fully start
 
+    - name: Capture container ID
+      id: container_id
+      run: |
+        container_id=$(docker ps -q)
+        echo "container_id=$container_id" >> $GITHUB_ENV
+
     - name: View Docker container logs
       run: |
-        docker logs $(docker ps -q)  # Check logs for issues
+        docker logs ${{ env.container_id }}  # Use the container ID from the previous step
 
     - name: Test if frontend is running
       run: |
@@ -41,4 +47,4 @@ jobs:
 
     - name: Stop Docker container
       run: |
-        docker ps -q | xargs docker stop
+        docker stop ${{ env.container_id }}  # Stop the container after the tests
