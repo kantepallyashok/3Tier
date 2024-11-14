@@ -21,7 +21,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t frontend-app -f ./frontend/Dockerfile ./frontend
+        docker build -t frontend-app -f ./FrontEnd/Dockerfile ./FrontEnd  # Update folder name here
 
     - name: Run Docker container
       run: |
@@ -29,12 +29,10 @@ jobs:
 
     - name: Wait for the application to start
       run: |
-        # Increase the sleep time to give more time for the app to start
-        sleep 10  # Wait 10 seconds for the container to fully start
+        sleep 10  # Increased wait time for the app to start
 
     - name: Test if frontend is running
       run: |
-        # Check if the frontend is accessible
         curl --silent --fail http://localhost:8080 || exit 1
 
     - name: Stop Docker container
